@@ -1,7 +1,7 @@
 /*
  *  For AstroMediComp.org
- *  Assignment # 02 by Sachin Bhosale
- *  First Windows Program
+ *  Assignment # 03 by Sachin Bhosale
+ *  Message Handling 
  */
 
 #include<windows.h>
@@ -10,6 +10,8 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
 {
+  MessageBox(NULL, TEXT("WinMain started!"), TEXT("WinMain Message"), MB_OK | MB_ICONINFORMATION);
+
   WNDCLASSEX wndclass;
   TCHAR szAppName[] = TEXT("MyApp");
 
@@ -55,10 +57,32 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
+  
+  TCHAR szMsg[255];
+  TCHAR szCaption[] = TEXT("WndProc Message");
   switch (iMsg)
   {
   case WM_DESTROY:
     PostQuitMessage(0);
+    break;
+  case WM_CREATE:
+    wsprintf(szMsg, TEXT("WM_CREATE called!"));
+    MessageBox(hwnd, szMsg, szCaption, MB_OK | MB_ICONWARNING);
+    break;
+  case WM_LBUTTONDOWN:
+    wsprintf(szMsg, TEXT("WM_LBUTTONDOWN called!"));
+    MessageBox(hwnd, szMsg, szCaption, MB_OK | MB_ICONQUESTION);
+    break;
+  case WM_KEYDOWN:
+    wsprintf(szMsg, TEXT("WM_KEYDOWN called!"));
+    MessageBox(hwnd, szMsg, szCaption, MB_OK | MB_ICONHAND);
+    switch (LOWORD(wParam))
+    {
+    case VK_ESCAPE:
+      MessageBox(hwnd, TEXT("Window will close now!"), szCaption, MB_OK | MB_ICONINFORMATION);
+      DestroyWindow(hwnd);
+      break;
+    }
     break;
   }
   return (DefWindowProc(hwnd, iMsg, wParam, lParam));
